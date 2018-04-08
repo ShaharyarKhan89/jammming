@@ -1,9 +1,10 @@
 
 const clientid = 'c5d1f255689e4bfd9cb8d933b2854d06';
 const clientsecret = '32b36786a505450b89b0b04bd26bbf32';
-const redirectUri = 'jammming9999.surge.sh';
-const spotifyUrl = 'https://accounts.spotify.com/authorize?client_id=c5d1f255689e4bfd9cb8d933b2854d06&redirect_uri=http://localhost:3000/%2Fcallback&scope=user-read-private%20user-read-email&response_type=token&state=123';
+const redirectUri = 'http://localhost:3000/';
+//const spotifyUrl = 'https://accounts.spotify.com/authorize?client_id=c5d1f255689e4bfd9cb8d933b2854d06&redirect_uri=http://localhost:3000/%2Fcallback&scope=user-read-private%20user-read-email&response_type=token&state=123';
 
+const spotifyUrl = 'https://accounts.spotify.com/authorize?client_id=${c5d1f255689e4bfd9cb8d933b2854d06}&response_type=token&scope=playlist-modify-public&redirect_uri=${http://localhost:3000/}; ';
 let accessToken = undefined;
 let expiresIn = undefined;
 
@@ -23,7 +24,7 @@ const urlExpiresIn = window.location.href.match(/expires_in=([^&]*)/);
 if(urlAccessToken && urlExpiresIn){
 
  accessToken = urlAccessToken[1];
-      expiresIn = urlExpiresIn[1];
+expiresIn = Number(urlExpiresIn[1]) ;
 
 window.setTimeout(() => accessToken = '', expiresIn * 1000);
 window.history.pushState('Access Token', null, '/');
@@ -37,12 +38,14 @@ else {
 
 search(term){
 
-	 const searchUrl = `https://api.spotify.com/v1/search?type=track&q=${term.replace(' ', '%20')}`;
+	 //const searchUrl = `https://api.spotify.com/v1/search?type=track&q=${term.replace(' ', '%20')}`;
+	 const searchUrl = 'https://api.spotify.com/v1/search?type=track&q=TERM';
+const accessToken = Spotify.getAccesstoken();
 return fetch(searchUrl,{
   headers: {Authorization: `Bearer ${accessToken}`}
-}).then(response => { let jsonResponse = response.json()})
+}) .then(response => response.json())
 .then(jsonResponse => {
-	if(!jsonResponse.tracks) return [];	
+	if(!jsonResponse.tracks) return [];
 	return jsonResponse.tracks.items.map(track=>{
 return {
 id: track.id,
@@ -64,7 +67,7 @@ uri: track.uri
     let userId = undefined;
     let playlistId = undefined;
     fetch(userUrl, {
-      headers: headers 
+      headers: headers
     })
     .then(response => response.json())
     .then(jsonResponse => userId = jsonResponse.id)
@@ -94,4 +97,4 @@ uri: track.uri
 };
 
 
-export default Spotify;	
+export default Spotify;

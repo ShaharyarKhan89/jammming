@@ -9,11 +9,11 @@ constructor(props){
 	this.handleTermChange = this.handleTermChange.bind(this);
 }
 	search(term){
-		this.props.onSearh(term)
+		this.props.onSearch(term);
 	}
 
 	handleTermChange(event){
-this.state.search(event.target.value);
+this.search(event.target.value);
 	}
 
   render() {

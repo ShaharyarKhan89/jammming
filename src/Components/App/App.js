@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import Spotify from '../src/util/Spotify';
+import Spotify from 'E:/jammming/src/util/Spotify';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
@@ -27,7 +27,7 @@ this.state.playlistTracks.push(track); //   playlistTracks: [...prevState.playli
   removeTrack(track){
    let newPlaylistTracks = this.state.playlistTracks.filter(plTrack => plTrack.id !== track.id  );
 this.setState({playlistTracks: newPlaylistTracks});
-    
+
   }
 
   updatePlaylistname(name){
@@ -49,10 +49,10 @@ Spotify.search(term).then(searchResults => this.setState({
       <div>
   <h1> Ja <span className="highlight"> mmm </span> ing </h1>
   <div className="App">
-    <SearchBar onSearch = {this.state.search} />
+    <SearchBar onSearch = {this.search} />
     <div className="App-playlist">
       <SearchResults  searchResults = {this.state.searchResults}/>
-      <Playlist playlistName = {this.state.playlistName} 
+      <Playlist playlistName = {this.state.playlistName}
        playlistTracks = {this.state.playlistTracks} onNameChange = {this.updatePlaylistname} onSave = {this.state.savePlaylist} />
     </div>
   </div>
