@@ -4,7 +4,7 @@ const clientsecret = '32b36786a505450b89b0b04bd26bbf32';
 const redirectUri = 'http://localhost:3000/';
 //const spotifyUrl = 'https://accounts.spotify.com/authorize?client_id=c5d1f255689e4bfd9cb8d933b2854d06&redirect_uri=http://localhost:3000/%2Fcallback&scope=user-read-private%20user-read-email&response_type=token&state=123';
 
-const spotifyUrl = 'https://accounts.spotify.com/authorize?client_id=${c5d1f255689e4bfd9cb8d933b2854d06}&response_type=token&scope=playlist-modify-public&redirect_uri=${http://localhost:3000/}; ';
+//const spotifyUrl = 'https://accounts.spotify.com/authorize?client_id=${c5d1f255689e4bfd9cb8d933b2854d06}&response_type=token&scope=playlist-modify-public&redirect_uri=${http://localhost:3000/}; ';
 let accessToken = undefined;
 let expiresIn = undefined;
 
@@ -31,12 +31,13 @@ window.history.pushState('Access Token', null, '/');
 
 }
 else {
-	window.location = spotifyUrl;
+	const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientid}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectUri}`;
+	window.location = accessUrl;
 }
 
 },
 
-search(term){
+/*search(term){
 
 	 //const searchUrl = `https://api.spotify.com/v1/search?type=track&q=${term.replace(' ', '%20')}`;
 	 const searchUrl = 'https://api.spotify.com/v1/search?type=track&q=TERM';
@@ -55,6 +56,23 @@ uri: track.uri
 }
         })
       });
+  },*/
+	search(term) {
+    return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    })
+      .then(response => response.json())
+      .then(jsonResponse => {
+        if (!jsonResponse.tracks) return []
+        return jsonResponse.tracks.items.map(track => {
+          return {
+            id: track.id,
+            name: track.name,
+            artists: track.artists[0].name,
+            uri: track.uri
+          }
+        })
+      })
   },
 
  savePlaylist(name, trackUris	) {
